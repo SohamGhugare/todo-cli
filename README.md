@@ -13,9 +13,11 @@
 Boom that's all, you should have an executable file in `target/release`
 
 ## Preview
-![Screenshot of help](assets/help.png)
 The help command
-![Screenshot of commands](assets/commands.png)
+![Screenshot of help](assets/help.png)
+
 Adding todos with priorities
-![Screenshot of list](assets/list.png)
+![Screenshot of commands](assets/commands.png)
+
 View all todos in a neat tabular form
+![Screenshot of list](assets/list.png)
