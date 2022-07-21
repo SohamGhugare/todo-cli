@@ -1,5 +1,8 @@
 use clap::{ Parser, Subcommand, Args };
 use std::error::Error;
+use crate::file_handler;
+use crate::file_handler::Todo;
+use chrono::prelude::*;
 
 #[derive(Parser)]
 #[clap(about="Minimal Todo app", version="0.1.0", author="SohamGhugare")]
@@ -16,8 +19,13 @@ struct Add {
 }
 
 impl Add {
-    fn new(todo: &String, priority: Priority) -> Result<(), Box<dyn Error>> {
-        add_todo(&todo, priority)?;
+    fn new(todo: String, priority: Priority) -> Result<(), Box<dyn Error>> {
+        let todo = Todo {
+            todo: todo,
+            priority: priority,
+            created_on: Local::now().format("%Y-%m-%d %H:%M:%S").to_string()
+        };
+        file_handler::add_todo(&todo)?;
         Ok(())
     }
 }
@@ -28,7 +36,7 @@ enum Commands {
     List,
 }
 
-enum Priority {
+pub enum Priority {
     High,
     Medium,
     Low
@@ -44,22 +52,18 @@ impl Priority {
         }
         
     }
-}
 
-fn add_todo(todo: &String, priority: Priority) -> Result<(), Box<dyn Error>> {
-    match priority {
-        Priority::High => {
-            println!("Adding {} to the list with High priority...", &todo)
-        },
-        Priority::Medium => {
-            println!("Adding {} to the list with Medium priority...", &todo)
-        },
-        Priority::Low => {
-            println!("Adding {} to the list with Low priority...", &todo)
+    pub fn as_str(&self) -> &str {
+        match &self {
+            Priority::High => "high",
+            Priority::Low => "low",
+            Priority::Medium => "medium"
         }
     }
+}
 
-
+fn list_todos() -> Result<(), Box<dyn Error>>{
+    file_handler::read_todo_file()?;
     Ok(())
 }
 
@@ -69,12 +73,12 @@ pub fn parse_cli() -> Result<(), Box<dyn Error>>{
     match &args.command {
         Commands::Add(Add {todo, priority}) => {
             if let Some(v) = priority {
-                Add::new(todo, Priority::new(&v)?)?;
+                Add::new(todo.clone(), Priority::new(&v)?)?;
             } else {
-                println!("Adding {} to list...", todo)
+                Add::new(todo.clone(), Priority::new(&"low".to_string())?)?;
             }
         },
-        Commands::List => println!("Listing")
+        Commands::List => list_todos()?
     }
 
     Ok(())

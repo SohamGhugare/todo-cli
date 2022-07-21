@@ -1,4 +1,5 @@
 mod cli;
+mod file_handler;
 
 use std::error::Error;
 
