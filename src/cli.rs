@@ -13,8 +13,9 @@ pub struct Cli {
 
 #[derive(Args)]
 struct Add {
+    #[clap(help="The actual todo")]
     todo: String,
-    #[clap(short, long)]
+    #[clap(short, long, help="Priority (high, med, low)")]
     priority: Option<String>
 }
 
@@ -32,7 +33,10 @@ impl Add {
 
 #[derive(Subcommand)]
 enum Commands {
+    /// Add a new todo
     Add(Add),
+    #[clap(help="List all todos")]
+    /// List all todos
     List,
 }
 
