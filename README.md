@@ -11,3 +11,11 @@
 `$ cd todo-cli && cargo build --release`
 
 Boom that's all, you should have an executable file in `target/release`
+
+## Preview
+![Screenshot of help](assets/help.png)
+The help command
+![Screenshot of commands](assets/commands.png)
+Adding todos with priorities
+![Screenshot of list](assets/list.png)
+View all todos in a neat tabular form
